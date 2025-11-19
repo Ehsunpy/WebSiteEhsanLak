@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{% block title %}استودیو دیجیتال احسان لک{% endblock %}</title>
+    <meta
+      name="description"
+      content="وب‌سایت شخصی احسان لک | برنامه‌نویس، پژوهشگر هوش مصنوعی و مدرس دوره‌های تخصصی."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="theme-body">
+    <div class="glow-layer"></div>
+    <div class="starry-night-animation" id="starryNight"></div>
+    <header class="site-header" data-animate="fade">
+      <div class="logo-mark">
+        <span class="dot"></span>
+        <span>EH</span>
+      </div>
+      <nav class="main-nav">
+        <a href="{% url 'core:home' %}#intro">خانه</a>
+        <a href="{% url 'core:home' %}#resume">رزومه</a>
+        <a href="{% url 'core:home' %}#blog">بلاگ</a>
+        <a href="{% url 'courses:list' %}">دوره‌ها</a>
+        <a href="{% url 'core:home' %}#contact">تماس</a>
+      </nav>
+      <div class="auth-actions">
+        {% if user.is_authenticated %}
+        <span class="hello">سلام {{ user.first_name|default:user.email }}</span>
+        <a class="btn ghost" href="{% url 'account_logout' %}">خروج</a>
+        {% else %}
+        <a class="btn ghost" href="{% url 'account_login' %}">ورود</a>
+        <a class="btn cta" href="{% url 'account_signup' %}">ساخت حساب</a>
+        {% endif %}
+      </div>
+      <button class="nav-toggle" aria-label="باز کردن منو">
+        <span></span><span></span><span></span>
+      </button>
+    </header>
+
+    <main>
+      {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+        <div class="flash {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div>
+          <p>© {{ contact_info.year }} {{ site_owner.name }} — تمام حقوق محفوظ است.</p>
+          <small>ساخته شده با عشق به هوش مصنوعی و طراحی.</small>
+        </div>
+        <div class="footer-links">
+          <a href="mailto:{{ contact_info.email }}">ایمیل</a>
+          {% if contact_info.github %}
+          <a href="{{ contact_info.github }}" target="_blank" rel="noopener noreferrer">گیت‌هاب</a>
+          {% endif %}
+          <a href="tel:{{ contact_info.phone }}">تماس</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
+

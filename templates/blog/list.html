@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}بلاگ احسان لک{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <p class="eyebrow">بلاگ</p>
+  <h1>تحلیل‌ها و تجربه‌های من</h1>
+  <p>دسته‌بندی، جست‌وجو و مطالعه مقالات هوش مصنوعی، برنامه‌نویسی و مسیر تحصیلی.</p>
+</section>
+
+<section class="filter-bar">
+  <form method="get">
+    <input name="q" type="search" value="{{ search_query }}" placeholder="جست‌وجوی مقاله" />
+    <select name="category">
+      <option value="">همه دسته‌ها</option>
+      {% for category in categories %}
+      <option value="{{ category.slug }}" {% if category.slug == active_category %}selected{% endif %}>
+        {{ category.title }}
+      </option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn ghost">فیلتر</button>
+  </form>
+</section>
+
+<section class="blog-grid archive">
+  {% for post in posts %}
+  <article class="blog-card" data-animate="rise">
+    <div class="blog-card__meta">
+      <span>{{ post.category.title }}</span>
+      <span>{{ post.published_at|date:"d F Y" }}</span>
+    </div>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.summary }}</p>
+    <a href="{{ post.get_absolute_url }}">مطالعه</a>
+  </article>
+  {% empty %}
+  <p>هنوز پستی ثبت نشده است.</p>
+  {% endfor %}
+</section>
+
+{% if is_paginated %}
+<div class="pagination">
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}&category={{ active_category }}&q={{ search_query }}">قبلی</a>
+  {% endif %}
+  <span>صفحه {{ page_obj.number }} از {{ paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}&category={{ active_category }}&q={{ search_query }}">بعدی</a>
+  {% endif %}
+ </div>
+{% endif %}
+{% endblock %}
+

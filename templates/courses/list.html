@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}دوره‌های احسان لک{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <p class="eyebrow">دوره‌ها</p>
+  <h1>آموزش‌های پروژه‌محور</h1>
+  <p>دانلود جزوه، ویدیو، فایل تمرین و دسترسی به بروزرسانی‌ها.</p>
+</section>
+
+<section class="filter-bar">
+  <form method="get">
+    <select name="category">
+      <option value="">دسته‌بندی</option>
+      {% for category in categories %}
+      <option value="{{ category.slug }}" {% if category.slug == active_category %}selected{% endif %}>{{ category.title }}</option>
+      {% endfor %}
+    </select>
+    <select name="level">
+      <option value="">سطح</option>
+      <option value="intro" {% if active_level == "intro" %}selected{% endif %}>مقدماتی</option>
+      <option value="intermediate" {% if active_level == "intermediate" %}selected{% endif %}>میان‌رده</option>
+      <option value="advanced" {% if active_level == "advanced" %}selected{% endif %}>پیشرفته</option>
+    </select>
+    <button type="submit" class="btn ghost">اعمال</button>
+  </form>
+</section>
+
+<section class="cards-grid">
+  {% for course in courses %}
+  <article class="course-card" style="--accent: {{ course.accent_color }};">
+    <header class="course-card__head">
+      <span class="chip">{{ course.get_level_display }}</span>
+      <span class="chip ghost">{{ course.duration }}</span>
+    </header>
+    <h3>{{ course.title }}</h3>
+    <p>{{ course.summary }}</p>
+    <div class="course-card__foot">
+      {% if course.price %}
+      <strong>{{ course.price|floatformat:0 }} تومان</strong>
+      {% else %}
+      <strong>رایگان</strong>
+      {% endif %}
+      <a href="{{ course.get_absolute_url }}">ورود به دوره</a>
+    </div>
+  </article>
+  {% empty %}
+  <p>دوره‌ای یافت نشد.</p>
+  {% endfor %}
+</section>
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block title %}ورود{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+  <h1>ورود به حساب</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn cta full">ورود</button>
+  </form>
+  <div class="auth-divider">
+    <span>یا</span>
+  </div>
+  <a class="btn ghost full" href="{% provider_login_url 'google' %}">ورود با Google</a>
+  <p>حساب ندارید؟ <a href="{% url 'account_signup' %}">ثبت‌نام کنید</a></p>
+</section>
+{% endblock %}
+

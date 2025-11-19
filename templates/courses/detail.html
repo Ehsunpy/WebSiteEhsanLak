@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<article class="course-page">
+  <header class="course-hero" style="--accent: {{ course.accent_color }};">
+    <div>
+      <p class="eyebrow">{{ course.category.title }}</p>
+      <h1>{{ course.title }}</h1>
+      <p>{{ course.summary }}</p>
+      <div class="chip-row">
+        <span>{{ course.get_level_display }}</span>
+        <span>{{ course.duration }}</span>
+        {% if course.include_certificate %}<span>گواهی پایان دوره</span>{% endif %}
+      </div>
+    </div>
+    <div class="course-pricing">
+      {% if course.price %}
+      <strong>{{ course.price|floatformat:0 }} تومان</strong>
+      {% else %}
+      <strong>رایگان</strong>
+      {% endif %}
+      <button class="btn cta">ثبت‌نام (به‌زودی)</button>
+    </div>
+  </header>
+
+  {% if course.featured_video_url %}
+  <div class="course-video">
+    <iframe
+      src="{{ course.featured_video_url }}"
+      title="{{ course.title }}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
+  {% endif %}
+
+  <section class="course-content">
+    {{ course.description|safe }}
+  </section>
+
+  <section class="course-resources">
+    <h3>فایل‌ها و منابع قابل دانلود</h3>
+    <ul>
+      {% for resource in course.resources.all %}
+      <li>
+        <span>{{ resource.title }}</span>
+        <small>{{ resource.get_resource_type_display }}</small>
+        {% if resource.is_downloadable %}
+        <a href="{{ resource.file.url }}" download>دانلود</a>
+        {% endif %}
+      </li>
+      {% empty %}
+      <li>منبعی اضافه نشده است.</li>
+      {% endfor %}
+    </ul>
+  </section>
+</article>
+
+<section class="related-section">
+  <h3>دوره‌های مشابه</h3>
+  <div class="cards-grid related">
+    {% for item in related_courses %}
+    <article class="course-card">
+      <h4>{{ item.title }}</h4>
+      <a href="{{ item.get_absolute_url }}">مشاهده</a>
+    </article>
+    {% empty %}
+    <p>دوره مرتبطی در دسترس نیست.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+

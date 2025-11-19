@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<article class="article-page">
+  <header class="article-hero" style="--accent: {{ post.cover_tone }};">
+    <p class="eyebrow">{{ post.category.title }}</p>
+    <h1>{{ post.title }}</h1>
+    <div class="article-meta">
+      <span>نویسنده: {{ post.author_name }}</span>
+      <span>{{ post.published_at|date:"d F Y" }}</span>
+      <span>{{ post.reading_time }} دقیقه مطالعه</span>
+    </div>
+  </header>
+
+  <div class="article-content">
+    {{ post.content|safe }}
+  </div>
+
+  {% if post.gallery.all %}
+  <section class="article-gallery">
+    {% for item in post.gallery.all %}
+    <figure>
+      <img src="{{ item.image.url }}" alt="{{ item.caption }}" />
+      <figcaption>{{ item.caption }}</figcaption>
+    </figure>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <footer class="article-footer">
+    <div class="tag-row">
+      {% for tag in post.tag_list %}
+      <span>#{{ tag }}</span>
+      {% endfor %}
+    </div>
+  </footer>
+</article>
+
+<section class="related-section">
+  <h3>مطالب مرتبط</h3>
+  <div class="blog-grid related">
+    {% for item in related_posts %}
+    <article class="blog-card">
+      <h4>{{ item.title }}</h4>
+      <a href="{{ item.get_absolute_url }}">مطالعه</a>
+    </article>
+    {% empty %}
+    <p>مطلب مرتبطی موجود نیست.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+

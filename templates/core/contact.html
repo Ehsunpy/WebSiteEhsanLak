@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}تماس با احسان لک{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <p class="eyebrow">ارسال پیام</p>
+  <h1>در تماس باشیم</h1>
+  <p>برای همکاری، تدریس خصوصی یا مشاوره پروژه فرم زیر را پر کنید.</p>
+</section>
+
+<section class="contact-section">
+  <div class="contact-card">
+    <ul class="contact-list">
+      <li>ایمیل: <a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a></li>
+      <li>تلفن: <a href="tel:{{ contact_info.phone }}">{{ contact_info.phone }}</a></li>
+      <li>مکان: {{ contact_info.location }}</li>
+    </ul>
+  </div>
+  <div class="contact-form">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn cta full">ارسال پیام</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
+
