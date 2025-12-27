@@ -28,6 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    "https://ehsanlak.liara.run",
+]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Application definition
 
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+'django.contrib.sitemaps',
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -86,10 +93,13 @@ WSGI_APPLICATION = "ehsan_site.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# در لیارا فایل سیستم فقط خواندنی است مگر پوشه tmp
+# برای تست سریع دیتابیس را در tmp قرار می‌دهیم
+# توجه: با هر بار ریستارت سرور، اطلاعات دیتابیس پاک می‌شود
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": "/tmp/db.sqlite3",
     }
 }
 
@@ -129,14 +139,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "/static/"
-if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-else:
-    STATICFILES_DIRS = []
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# تنظیمات WhiteNoise برای فشرده‌سازی و کشینگ
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# تنظیمات مدیا برای محیط‌های Read-Only (موقت)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = "/tmp/media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
